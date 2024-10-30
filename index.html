@@ -21,7 +21,7 @@
     </div>
 
     <script>
-        const backendUrl = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+        const backendUrl = 'https://script.google.com/macros/s/AKfycby24t8KRRazSXyl2V7b4zuvFCSUNhtQ1QVvS8WICJy0TnWpXUXXIs1yCKWMqaKEON5D/exec';
 
         async function downloadSample() {
             const link = document.getElementById("linkInput").value;
@@ -30,8 +30,9 @@
 
             try {
                 const response = await fetch(`${backendUrl}?link=${encodeURIComponent(link)}`);
-                const base64Data = await response.text();
+                if (!response.ok) throw new Error("Failed to retrieve download link");
 
+                const base64Data = await response.text();
                 const binaryString = atob(base64Data);
                 const len = binaryString.length;
                 const bytes = new Uint8Array(len);
@@ -57,3 +58,4 @@
     </script>
 </body>
 </html>
+
