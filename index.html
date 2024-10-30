@@ -21,7 +21,8 @@
     </div>
 
     <script>
-        const backendUrl = 'https://script.google.com/macros/s/AKfycbwrq2tWgKg18gsevWUgu9Eie60NBNoOxMkrIb9HAHB-ZoOOvobB_BQ3DsruOFgl1u3l/exec';
+        // Update with your Google Apps Script URL
+        const backendUrl = 'https://script.google.com/macros/s/AKfycbzA__CniYreZbTOLcKWtjZ2SoV4ziJ0Pl4isFEZdnm-J12T18kZSmmItXSGvc8UuCMQ/exec';
 
         async function downloadSample() {
             const link = document.getElementById("linkInput").value;
@@ -33,6 +34,12 @@
                 if (!response.ok) throw new Error("Failed to retrieve download link");
 
                 const base64Data = await response.text();
+                
+                // Check if the response is an error message
+                if (base64Data.startsWith("Error occurred:")) {
+                    throw new Error(base64Data);
+                }
+
                 const binaryString = atob(base64Data);
                 const len = binaryString.length;
                 const bytes = new Uint8Array(len);
