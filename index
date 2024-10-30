@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Downloader</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { text-align: center; max-width: 400px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sample Downloader</h1>
+        <p>Enter a link to download the sample audio:</p>
+        <input type="text" id="linkInput" placeholder="Enter link here">
+        <button onclick="downloadSample()">Download</button>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        const backendUrl = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+
+        async function downloadSample() {
+            const link = document.getElementById("linkInput").value;
+            const statusText = document.getElementById("status");
+            statusText.textContent = "Processing...";
+
+            try {
+                const response = await fetch(`${backendUrl}?link=${encodeURIComponent(link)}`);
+                const base64Data = await response.text();
+
+                const binaryString = atob(base64Data);
+                const len = binaryString.length;
+                const bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                const blob = new Blob([bytes], { type: 'audio/mpeg' });
+                const downloadUrl = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = "sample.mp3";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                statusText.textContent = "Download complete!";
+            } catch (error) {
+                statusText.textContent = "An error occurred.";
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
