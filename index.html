@@ -21,7 +21,7 @@
     </div>
 
     <script>
-        const backendUrl = 'https://script.google.com/macros/s/AKfycbx7pK6MMwwkVfMkFAuP7s5zZ0MJCraxvTmuWvzroHxUQ1IDlGoyJCPJJuEZ_8nk7bf1/exec';
+        const backendUrl = 'https://script.google.com/macros/s/AKfycbwrq2tWgKg18gsevWUgu9Eie60NBNoOxMkrIb9HAHB-ZoOOvobB_BQ3DsruOFgl1u3l/exec';
 
         async function downloadSample() {
             const link = document.getElementById("linkInput").value;
@@ -51,7 +51,7 @@
 
                 statusText.textContent = "Download complete!";
             } catch (error) {
-                statusText.textContent = "An error occurred.";
+                statusText.textContent = "An error occurred: " + error.message;
                 console.error(error);
             }
         }
